@@ -1,6 +1,6 @@
 // Supabase Auth + PostgREST. No private server key is used by this application.
 class TrackerCloud {
-  constructor(config){this.url=(config.supabaseUrl||'').replace(/\/$/,'');this.key=config.supabasePublishableKey||'';this.sessionKey='mm-tracker-session:'+this.url;this.user=null;this.version=null;this.refreshPromise=null;}
+  constructor(config){this.url=(config.supabaseUrl||'').trim().replace(/\/$/,'');this.key=(config.supabasePublishableKey||'').trim();this.sessionKey='mm-tracker-session:'+this.url;this.user=null;this.version=null;this.refreshPromise=null;}
   configured(){let publicKey=this.key.startsWith('sb_publishable_');if(!publicKey){try{publicKey=JSON.parse(atob(this.key.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).role==='anon';}catch{}}return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(this.url)&&publicKey;}
   session(){try{return JSON.parse(localStorage.getItem(this.sessionKey)||'null');}catch{return null;}}
   storeSession(s){const value={...s,expires_at:s.expires_at||Math.floor(Date.now()/1000)+(s.expires_in||3600)};localStorage.setItem(this.sessionKey,JSON.stringify(value));this.user=value.user;return value;}
