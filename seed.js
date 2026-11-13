@@ -1,0 +1,1 @@
+window.SEED={"jobs": [], "tasks": [], "companies": {}, "source": ""};
